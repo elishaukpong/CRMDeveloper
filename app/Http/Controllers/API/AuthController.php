@@ -3,12 +3,11 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\LoginAPIRequest;
 
 class AuthController extends Controller
 {
-   
+
     public function __construct()
     {
     }
@@ -18,12 +17,12 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function login()
+    public function login(LoginAPIRequest $request)
     {
-        $credentials = request(['email', 'password']);
+        $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['error' => 'Email or Password does not match any user record'], 401);
         }
 
         return $this->respondWithToken($token);
@@ -36,7 +35,14 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        $user = auth()->user();
+
+        if($user){
+            return response()->json($user);
+        }
+
+        return response()->json(['message' => "User not logged in"], 403);
+
     }
 
     /**
@@ -46,9 +52,13 @@ class AuthController extends Controller
      */
     public function logout()
     {
+        if (! auth()->user()) {
+            return response()->json(['message' => "User not logged in"], 403);
+        }
+
         auth()->logout();
 
-        return response()->json(['message' => 'Successfully logged out']);
+        return response()->json(['message' => 'User logged out successfully.']);
     }
 
     /**
