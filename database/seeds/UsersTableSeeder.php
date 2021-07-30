@@ -13,5 +13,7 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $adminUser = factory(User::class)->create();
+
+        $adminUser->assignRole('Admin');
     }
 }
