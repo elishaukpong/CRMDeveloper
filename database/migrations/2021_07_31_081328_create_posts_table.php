@@ -19,6 +19,7 @@ class CreatePostsTable extends Migration
             $table->text('content');
             $table->unsignedBigInteger('user_id');
             $table->integer('views')->default(0);
+            $table->integer('likes')->default(0);
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')

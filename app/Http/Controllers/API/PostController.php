@@ -38,6 +38,34 @@ class PostController extends Controller
 
         $post->recordViewership();
 
+        return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
+    }
+
+    public function like($postId)
+    {
+        $post = Post::find($postId);
+
+        if(! $post){
+            return response()->json(['message' => 'Post record does not exist'],404);
+        }
+
+        $post->recordLike();
+
+        return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
+    }
+
+    public function comment($postId)
+    {
+        $post = Post::find($postId);
+
+        if(! $post){
+            return response()->json(['message' => 'Post record does not exist'],404);
+        }
+
+        $post->recordViewership();
+
         return response()->json(['message' => 'Post Retrived Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
     }
+
+
 }

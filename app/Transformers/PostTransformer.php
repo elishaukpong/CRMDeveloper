@@ -36,7 +36,8 @@ class PostTransformer extends TransformerAbstract
             'title' => $post->title,
             'content' => $post->content,
             'views' => $post->views,
-            'creator' => 1
+            'likes' => $post->likes,
+            'creator' => $post->creator
         ];
     }
 }
