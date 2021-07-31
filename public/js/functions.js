@@ -2,7 +2,6 @@ function processLoginSuccess(data) {
 
     setCookie('token', data.access_token, data.expires_in);
 
-
     return redirect('/home');
 
 }
@@ -42,10 +41,6 @@ function populateSelectFieldWithUsers(element) {
     getAllUsers(formatUsersForRoleChangeSelectElement,element);
 }
 
-function populateTableFieldWithUsers(element) {
-    getAllUsers(formatUsersForDisplayUsersTableElement,element);
-}
-
 function formatUsersForRoleChangeSelectElement(data, element){
 
     element.append(
@@ -53,6 +48,10 @@ function formatUsersForRoleChangeSelectElement(data, element){
             return cleanedData += `<option value="${currentData.id}">${currentData.name}</option>`;
         },'')
     );
+}
+
+function populateTableFieldWithUsers(element) {
+    getAllUsers(formatUsersForDisplayUsersTableElement,element);
 }
 
 function formatUsersForDisplayUsersTableElement(data, element){
@@ -87,21 +86,36 @@ function getAllUsers(handler,element){
 }
 
 function processUserRoleChange(elementId) {
-    const formData = $(`form[id=${elementId}]`).serialize();
+    makeRequestWithBody('POST', changeUserRole, $(`form[id=${elementId}]`).serialize(), handleUserRoleChangeSuccess);
+}
 
+function createNewUser(formElementId) {
+    makeRequestWithBody('POST', addNewUser, $(`form[id=${formElementId}]`).serialize(), handleUserRegistrationSuccess);
+}
+
+function handleUserRegistrationSuccess(result){
+    return redirect('/users');
+}
+
+function handleUserRoleChangeSuccess(result){
+    return redirect('/users');
+}
+
+function makeRequestWithBody(requestVerb,requestUrl, data, successHandler){
     let requestOptions = {
-        method: 'POST',
+        method: requestVerb,
         headers: {
             'content-type': 'application/x-www-form-urlencoded',
             'Accept': 'application/json',
             'Authorization': 'Bearer ' + getCookie('token')
         },
-        body: formData
+        body: data
     };
 
-    fetch(changeUserRole, requestOptions)
+    fetch(requestUrl, requestOptions)
         .then(response => response.text())
-        .then(result => console.log(result))
+        .then(result => JSON.parse(result))
+        .then(result => successHandler(result))
         .catch(error => console.log('error', error));
 }
 

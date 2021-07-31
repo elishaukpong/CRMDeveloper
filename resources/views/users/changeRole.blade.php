@@ -28,7 +28,7 @@
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="role" value="Viewer">
-                    <label class="form-check-label" for="inlineRadio2">Reader</label>
+                    <label class="form-check-label" for="inlineRadio2">Viewer</label>
                 </div>
 
                 <div class="form-group row mb-0">

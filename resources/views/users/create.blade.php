@@ -47,13 +47,13 @@
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" name="role" value="Viewer">
-                    <label class="form-check-label" for="inlineRadio2">Reader</label>
+                    <label class="form-check-label" for="inlineRadio2">Viewer</label>
                 </div>
 
                 <div class="form-group row mb-0">
                     <div class="col-md-6">
                         <button type="submit" class="btn btn-primary form-control">
-                            {{ __('Register') }}
+                            Create User
                         </button>
                     </div>
                 </div>
@@ -69,23 +69,7 @@
             $('#create-user').submit(function(e){
                 e.preventDefault();
 
-                const formData = $('form[id=create-user]').serialize();
-
-                let requestOptions = {
-                    method: 'POST',
-                    headers:{
-                        'content-type': 'application/x-www-form-urlencoded',
-                        'Accept': 'application/json',
-                        'Authorization': 'Bearer ' + getCookie('token')
-                    },
-                    body: formData
-                };
-
-
-                fetch(addNewUser, requestOptions)
-                    .then(response => response.text())
-                    .then(result => console.log(result))
-                    .catch(error => console.log('error', error));
+                createNewUser('create-user');
             });
         });
     </script>
