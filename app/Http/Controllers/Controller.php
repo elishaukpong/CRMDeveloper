@@ -15,11 +15,10 @@ class Controller extends BaseController
 
     public function transformObject($models, $transformer)
     {
-        if($models instanceof Collection){
-            return $models->transformWith($transformer)->toArray();
-
-        }else if($models instanceof Model){
-            return $transformer->transform($models);
+       if($models instanceof Model){
+            $models = collect([$models]);
         }
+
+        return $models->transformWith($transformer)->toArray();
     }
 }

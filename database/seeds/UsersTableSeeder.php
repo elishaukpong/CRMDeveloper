@@ -12,7 +12,9 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        $adminUser = factory(User::class)->create();
+        $adminUser = factory(User::class)->create([
+            'email' => 'admin@test.test'
+        ]);
 
         $adminUser->assignRole('Admin');
     }

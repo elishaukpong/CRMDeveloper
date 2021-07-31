@@ -37,7 +37,7 @@ class PostController extends Controller
             return response()->json(['message' => 'Post record does not exist'],404);
         }
 
-        if(auth()->user()->hasRole('Viewer'))
+        if(auth()->user()->can('view articles'))
             $post->recordViewership();
 
         return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);

@@ -4,6 +4,7 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginAPIRequest;
+use App\Transformers\UserTransformer;
 
 class AuthController extends Controller
 {
@@ -36,14 +37,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        $user = auth()->user();
-
-        if($user){
-            return response()->json($user);
-        }
-
-        return response()->json(['message' => "User not logged in"], 403);
-
+        return response()->json(['message' => 'Authenticated User Retrieved', 'data' => $this->transformObject(auth()->user(), new UserTransformer())]);
     }
 
     /**
@@ -53,10 +47,6 @@ class AuthController extends Controller
      */
     public function logout()
     {
-        if (! auth()->user()) {
-            return response()->json(['message' => "User not logged in"], 403);
-        }
-
         auth()->logout();
 
         return response()->json(['message' => 'User logged out successfully.']);

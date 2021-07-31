@@ -36,8 +36,8 @@ class PostTransformer extends TransformerAbstract
             'id' => $post->id,
             'title' => $post->title,
             'content' => $post->content,
-            'views' => $post->views,
-            'likes' => $post->likes,
+            'views' => $post->views ?? 0,
+            'likes' => $post->likes ?? 0,
             'created_at' => $post->created_at
         ];
     }
@@ -50,5 +50,12 @@ class PostTransformer extends TransformerAbstract
     public function includeComments(Post $post)
     {
         return $this->collection($post->comments, new CommentTransformer);
+    }
+
+    public function customTransformSingleModel($data)
+    {
+        return [
+            $this->transform($data),
+        ];
     }
 }
