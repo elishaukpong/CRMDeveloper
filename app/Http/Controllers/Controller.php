@@ -19,6 +19,6 @@ class Controller extends BaseController
             $models = collect([$models]);
         }
 
-        return $models->transformWith($transformer)->toArray();
+        return $models->transformWith($transformer)->toArray()['data'];
     }
 }
