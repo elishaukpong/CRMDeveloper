@@ -38,6 +38,7 @@ class PostTransformer extends TransformerAbstract
             'content' => $post->content,
             'views' => $post->views,
             'likes' => $post->likes,
+            'created_at' => $post->created_at
         ];
     }
 

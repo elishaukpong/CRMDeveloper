@@ -7,7 +7,10 @@ use Illuminate\Http\Request;
 
 class Post extends Model
 {
-    protected $fillable = ['title', 'content', 'user_id'];
+    /**
+     * @var string[]
+     */
+    protected $fillable = ['title', 'content', 'user_id','views','likes'];
 
     /**
      * @return int
@@ -38,6 +41,10 @@ class Post extends Model
         return $this->increment('likes');
     }
 
+    /**
+     * @param array $data
+     * @return Model
+     */
     public function recordComment(array $data)
     {
         return $this->comments()->create([
@@ -54,6 +61,9 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_id');
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);

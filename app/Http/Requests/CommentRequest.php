@@ -13,7 +13,7 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->user()->hasRole('Admin') || $this->user()->hasRole('Viewer')){
+        if($this->user()->can('comment on articles')){
             return true;
         }
 

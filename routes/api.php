@@ -13,19 +13,15 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::group(['prefix' => 'v1'], function(){
+Route::group(['prefix' => 'v1', 'middleware' => 'api'], function(){
     Route::group(['prefix' => 'auth'], function () {
         Route::post('login', 'API\AuthController@login');
-
-        Route::group(['middleware' => 'api'], function(){
-            Route::post('logout', 'API\AuthController@logout');
-            Route::post('refresh', 'API\AuthController@refresh');
-            Route::get('me', 'API\AuthController@me');
-        });
+        Route::post('logout', 'API\AuthController@logout');
+        Route::post('refresh', 'API\AuthController@refresh');
+        Route::get('me', 'API\AuthController@me');
     });
 
-
-    Route::group(['middleware' => 'api'], function(){
+    Route::group(['middleware' => 'auth:api'], function(){
         Route::get('users', 'API\UsersController@index');
         Route::post('users', 'API\UsersController@addUser');
         Route::post('users/changerole', 'API\UsersController@changeRole');

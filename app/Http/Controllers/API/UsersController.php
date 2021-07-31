@@ -26,7 +26,7 @@ class UsersController extends Controller
 
         $user->assignRole($request->role);
 
-        return response()->json(['message' => 'User created successfully']);
+        return response()->json(['message' => 'User created successfully', 'data' => $this->transformObject($user, new UserTransformer())]);
     }
 
     public function changeRole(ChangeUserRoleRequest $request)

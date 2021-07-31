@@ -14,7 +14,7 @@ class PostRequest extends FormRequest
      */
     public function authorize()
     {
-        if($this->user()->hasRole('Admin') || $this->user()->hasRole('Writer')){
+        if($this->user()->can('create articles')){
             return true;
         }
 

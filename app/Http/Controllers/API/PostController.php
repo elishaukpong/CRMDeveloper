@@ -37,7 +37,8 @@ class PostController extends Controller
             return response()->json(['message' => 'Post record does not exist'],404);
         }
 
-        $post->recordViewership();
+        if(auth()->user()->hasRole('Viewer'))
+            $post->recordViewership();
 
         return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
     }
@@ -50,7 +51,8 @@ class PostController extends Controller
             return response()->json(['message' => 'Post record does not exist'],404);
         }
 
-        $post->recordLike();
+        if(auth()->user()->can('like articles'))
+            $post->recordLike();
 
         return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
     }
@@ -61,7 +63,7 @@ class PostController extends Controller
 
         $post->recordComment($request->all());
 
-        return response()->json(['message' => 'Post Retrived Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
+        return response()->json(['message' => 'Post has been commented on Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
     }
 
 

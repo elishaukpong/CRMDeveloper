@@ -33,8 +33,9 @@ class CommentTransformer extends TransformerAbstract
     public function transform(Comment $comment)
     {
         return [
+            'id' => $comment->id,
             'message' => $comment->message,
-            'id' => $comment->id
+            'created_at' => $comment->created_at
         ];
     }
 

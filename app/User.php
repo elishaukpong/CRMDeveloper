@@ -59,16 +59,17 @@ class User extends Authenticatable implements JWTSubject
         return [];
     }
 
-    public function getDefaultGuardName()
-    {
-        return 'api';
-    }
-
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function posts()
     {
         return $this->hasMany(Post::class);
