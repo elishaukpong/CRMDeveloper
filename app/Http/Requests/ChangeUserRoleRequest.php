@@ -28,8 +28,8 @@ class ChangeUserRoleRequest extends FormRequest
     public function rules()
     {
         return [
-            'user_id' => 'required | integer | exists:user,id',
-            'role' => 'string | exists:roles,name'
+            'user_id' => 'required | integer | exists:users,id',
+            'role' => 'required | string | exists:roles,name'
         ];
     }
 }

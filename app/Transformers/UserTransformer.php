@@ -13,7 +13,7 @@ class UserTransformer extends TransformerAbstract
      * @var array
      */
     protected $defaultIncludes = [
-        //
+        'roles'
     ];
 
     /**
@@ -30,13 +30,17 @@ class UserTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($user)
+    public function transform(User $user)
     {
-        return $user;
         return [
             'id' => $user->id,
             'name' => $user->name,
             'email' => $user->email,
         ];
+    }
+
+    public function includeRoles(User $user)
+    {
+        return $this->collection($user->roles, new RoleTransformer);
     }
 }

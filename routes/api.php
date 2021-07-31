@@ -34,6 +34,6 @@ Route::group(['prefix' => 'v1'], function(){
         Route::post('posts', 'API\PostController@add');
         Route::get('post/{id}', 'API\PostController@view');
         Route::get('post/{id}/like', 'API\PostController@like');
-        Route::post('post/{id}/comment', 'API\PostController@comment');
+        Route::post('post/comment', 'API\PostController@comment');
     });
 });

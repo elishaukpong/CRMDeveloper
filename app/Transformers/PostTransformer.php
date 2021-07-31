@@ -2,6 +2,7 @@
 
 namespace App\Transformers;
 
+use App\Post;
 use League\Fractal\TransformerAbstract;
 
 class PostTransformer extends TransformerAbstract
@@ -12,7 +13,7 @@ class PostTransformer extends TransformerAbstract
      * @var array
      */
     protected $defaultIncludes = [
-        //
+        'creator','comments'
     ];
 
     /**
@@ -29,7 +30,7 @@ class PostTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform($post)
+    public function transform(Post $post)
     {
         return [
             'id' => $post->id,
@@ -37,7 +38,16 @@ class PostTransformer extends TransformerAbstract
             'content' => $post->content,
             'views' => $post->views,
             'likes' => $post->likes,
-            'creator' => $post->creator
         ];
+    }
+
+    public function includeCreator(Post $post)
+    {
+        return $this->item($post->creator, new UserTransformer);
+    }
+
+    public function includeComments(Post $post)
+    {
+        return $this->collection($post->comments, new CommentTransformer);
     }
 }

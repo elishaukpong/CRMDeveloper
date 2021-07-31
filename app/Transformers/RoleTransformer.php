@@ -2,10 +2,10 @@
 
 namespace App\Transformers;
 
-use App\Comment;
 use League\Fractal\TransformerAbstract;
+use Spatie\Permission\Models\Role;
 
-class CommentTransformer extends TransformerAbstract
+class RoleTransformer extends TransformerAbstract
 {
     /**
      * List of resources to automatically include
@@ -13,7 +13,7 @@ class CommentTransformer extends TransformerAbstract
      * @var array
      */
     protected $defaultIncludes = [
-        'commentator'
+        //
     ];
 
     /**
@@ -30,16 +30,10 @@ class CommentTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Comment $comment)
+    public function transform(Role $role)
     {
         return [
-            'message' => $comment->message,
-            'id' => $comment->id
+            'name' => $role->name
         ];
-    }
-
-    public function includeCommentator(Comment $comment)
-    {
-        return $this->item($comment->commentator, new UserTransformer);
     }
 }

@@ -13,6 +13,10 @@ class CommentRequest extends FormRequest
      */
     public function authorize()
     {
+        if($this->user()->hasRole('Admin') || $this->user()->hasRole('Viewer')){
+            return true;
+        }
+
         return false;
     }
 
@@ -24,7 +28,9 @@ class CommentRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'post_id' => 'required | integer | exists:posts,id',
+            'user_id' => 'required | integer | exists:users,id',
+            'message' => 'required  | string'
         ];
     }
 }

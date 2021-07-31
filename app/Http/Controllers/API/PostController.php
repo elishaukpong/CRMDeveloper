@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CommentRequest;
 use App\Http\Requests\PostRequest;
 use App\Post;
 use App\Transformers\PostTransformer;
@@ -12,7 +13,7 @@ class PostController extends Controller
 {
     public function index()
     {
-        return response()->json(['message' => 'Data Retrieved', 'data' =>Post::all()->transformWith(new PostTransformer())]);
+        return response()->json(['message' => 'Data Retrieved', 'data' =>$this->transformObject(Post::all(), new PostTransformer())]);
     }
 
     public function add(PostRequest $request)
@@ -54,15 +55,11 @@ class PostController extends Controller
         return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
     }
 
-    public function comment($postId)
+    public function comment(CommentRequest $request)
     {
-        $post = Post::find($postId);
+        $post = Post::findOrFail($request->post_id);
 
-        if(! $post){
-            return response()->json(['message' => 'Post record does not exist'],404);
-        }
-
-        $post->recordViewership();
+        $post->recordComment($request->all());
 
         return response()->json(['message' => 'Post Retrived Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
     }

@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 
 class Post extends Model
 {
@@ -35,6 +36,14 @@ class Post extends Model
         // else do not increment
 
         return $this->increment('likes');
+    }
+
+    public function recordComment(array $data)
+    {
+        return $this->comments()->create([
+            'user_id' => $data['user_id'],
+            'message' => $data['message']
+        ]);
     }
 
     /**
