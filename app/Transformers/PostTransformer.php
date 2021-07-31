@@ -29,12 +29,13 @@ class PostTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform()
+    public function transform($post)
     {
         return [
-            'id' => $this->id,
-            'title' => $this->title,
-            'content' => $this->content,
+            'id' => $post->id,
+            'title' => $post->title,
+            'content' => $post->content,
+            'views' => $post->views,
             'creator' => 1
         ];
     }

@@ -31,5 +31,7 @@ Route::group(['prefix' => 'v1'], function(){
         Route::post('users/changerole', 'API\UsersController@changeRole');
 
         Route::get('posts', 'API\PostController@index');
+        Route::post('posts', 'API\PostController@add');
+        Route::get('post/{id}', 'API\PostController@view');
     });
 });

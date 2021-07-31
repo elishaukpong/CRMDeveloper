@@ -1,6 +1,7 @@
 <?php
 
 use App\Post;
+use App\User;
 use Illuminate\Database\Seeder;
 
 class PostTableSeeder extends Seeder
@@ -12,6 +13,8 @@ class PostTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(Post::class,4)->create();
+        if(User::role('Writer')->exists()){
+            factory(Post::class,4)->create();
+        }
     }
 }
