@@ -29,9 +29,9 @@ class AddUserRequest extends FormRequest
     {
         return [
             'name' => 'required | string | max:255',
-            'email' => 'string | email | unique:users',
+            'email' => 'required | string | email | unique:users',
             'password' => 'required | string | min:8',
-            'role' => 'string | exists:roles,name',
+            'role' => 'required | string | exists:roles,name',
         ];
     }
 }

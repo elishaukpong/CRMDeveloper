@@ -37,7 +37,12 @@ class UserTransformer extends TransformerAbstract
             'name' => $user->name,
             'email' => $user->email,
             'email_verified_at' => $user->email_verified_at,
-            'created_at' => $user->created_at
+            'created_at' => $user->created_at->format('d-m-Y'),
+            'links' => [
+                [
+                    'uri' => '/books/'.$user->id,
+                ]
+            ]
         ];
     }
 

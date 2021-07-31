@@ -8,13 +8,11 @@
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
-                    @if (session('status'))
-                        <div class="alert alert-success" role="alert">
-                            {{ session('status') }}
-                        </div>
-                    @endif
 
-                    You are logged in!
+                    <a href="{{route('user.all')}}" class="btn btn-primary">All User</a>
+                    <a href="{{route('user.create')}}" class="btn btn-dark">Create User</a>
+                    <a href="{{route('user.changerole')}}" class="btn btn-secondary ">Change User Role</a>
+
                 </div>
             </div>
         </div>

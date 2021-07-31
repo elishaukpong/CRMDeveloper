@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
+
     /**
      * Show the application dashboard.
      *
@@ -14,5 +15,20 @@ class HomeController extends Controller
     public function index()
     {
         return view('home');
+    }
+
+    public function allUsers()
+    {
+        return view('users.index');
+    }
+
+    public function createUser()
+    {
+        return view('users.create');
+    }
+
+    public function changeUserRole()
+    {
+        return view('users.changerole');
     }
 }
