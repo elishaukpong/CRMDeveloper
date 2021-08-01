@@ -19,8 +19,6 @@ class PostController extends Controller
 
     public function add(PostRequest $request)
     {
-        $user = User::findOrFail($request->user_id);
-
         $post = Post::create($request->all());
 
         return response()->json(['message' => 'Post created successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
@@ -28,11 +26,7 @@ class PostController extends Controller
 
     public function view($postId)
     {
-        $post = Post::find($postId);
-
-        if(! $post){
-            return response()->json(['message' => 'Post record does not exist'],404);
-        }
+        $post = Post::findOrFail($postId);
 
         if(auth()->user()->can('view articles'))
             $post->recordViewership();
@@ -42,11 +36,7 @@ class PostController extends Controller
 
     public function like($postId)
     {
-        $post = Post::find($postId);
-
-        if(! $post){
-            return response()->json(['message' => 'Post record does not exist'],404);
-        }
+        $post = Post::findOrFail($postId);
 
         if(! auth()->user()->can('like articles'))
             return response()->json(['message' => 'Post Can Only be liked by Reader'],403);
