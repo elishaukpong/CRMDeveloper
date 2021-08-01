@@ -51,4 +51,9 @@ class HomeController extends Controller
     {
         return view('posts.create');
     }
+
+    public function readerIndex()
+    {
+        return view('reader');
+    }
 }

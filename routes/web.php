@@ -29,3 +29,6 @@ Route::get('/writer', 'HomeController@writerIndex')->name('writer.home');
 Route::get('/posts', 'HomeController@allPosts')->name('post.all');
 Route::get('/posts/create', 'HomeController@createPost')->name('post.create');
 Route::get('/posts/{post}', 'HomeController@viewPosts')->name('post.view');
+
+Route::get('/reader', 'HomeController@readerIndex')->name('reader.home');
+
