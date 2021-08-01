@@ -1,15 +1,32 @@
 function processLoginSuccess(data) {
-
     setCookie('token', data.access_token, data.expires_in);
     setCookie('auth_id', data.user[0].id, data.expires_in);
     setCookie('role', data.user[0].roles[0].name, data.expires_in);
 
-    return redirect('/home');
+    let redirectRoute = '';
 
+    switch (data.user[0].roles[0].name) {
+        case 'Admin':
+            redirectRoute = adminHomepage;
+            break;
+        case 'Writer':
+            redirectRoute = writerHomepage;
+            break;
+        default:
+            redirectRoute = viewerHomepage;
+
+            break;
+    }
+
+    return redirect(redirectRoute);
 }
 
 function checkForAuth() {
 
+}
+
+function checkForRole(role) {
+    return role === getCookie('role');
 }
 
 function redirect(route) {
@@ -198,7 +215,6 @@ function likeUserPost(){
     let likePostUrl = likePost.replace('{id}', getPostId());
     makeRequestWithoutBody('GET',likePostUrl,handlePostLikeSuccess,'')
 }
-
 
 function handlePostLikeSuccess(result,element){
 
