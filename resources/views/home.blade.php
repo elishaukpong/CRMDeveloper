@@ -23,7 +23,7 @@
 @push('scripts')
     <script>
         $(document).ready(function (){
-            checkForAdmin();
+            checkAuthFor(roles.admin);
         });
     </script>
 @endpush

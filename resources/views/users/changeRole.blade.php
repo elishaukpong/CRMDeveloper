@@ -48,7 +48,7 @@
     <script>
         $(document).ready(function (){
 
-            checkForAdmin();
+            checkAuthFor(roles.admin);
 
             populateSelectFieldWithUsers($('#user-list'));
 

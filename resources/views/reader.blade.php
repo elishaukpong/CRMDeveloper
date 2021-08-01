@@ -21,7 +21,7 @@
 @push('scripts')
     <script>
         $(document).ready(function (){
-            checkForReader();
+            checkAuthFor(roles.reader);
         });
     </script>
 @endpush

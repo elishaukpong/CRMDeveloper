@@ -23,7 +23,7 @@
 @push('scripts')
     <script>
         $(document).ready(function (){
-            checkForWriter();
+            checkAuthFor(roles.writer);
         });
     </script>
 @endpush

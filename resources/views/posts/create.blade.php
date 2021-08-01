@@ -43,7 +43,7 @@
     <script>
         $(document).ready(function (){
 
-            checkForWriter();
+            checkAuthFor(roles.writer);
 
             $('#create-post').submit(function(e){
                 e.preventDefault();

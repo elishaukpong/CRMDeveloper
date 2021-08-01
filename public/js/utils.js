@@ -8,7 +8,7 @@ let roles = {
   'reader': 'Viewer',
 };
 
-let okStatus = [201,200];
+let okStatus = [201,200,401];
 
 //web routes
 const adminHomepage = frontEndBase + 'home';

@@ -45,20 +45,8 @@ function checkForAuth() {
 
 }
 
-function checkForAdmin(){
-    if(! checkForRole(roles.admin)){
-        checkForNoAuth();
-    }
-}
-
-function checkForWriter(){
-    if(! checkForRole(roles.writer)){
-        checkForNoAuth();
-    }
-}
-
-function checkForReader(){
-    if(! checkForRole(roles.reader)){
+function checkAuthFor(role){
+    if(! checkForRole(role)){
         checkForNoAuth();
     }
 }
