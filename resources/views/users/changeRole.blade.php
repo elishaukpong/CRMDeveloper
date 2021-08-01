@@ -48,6 +48,8 @@
     <script>
         $(document).ready(function (){
 
+            checkForAdmin();
+
             populateSelectFieldWithUsers($('#user-list'));
 
             $('#change-role').submit(function(e){

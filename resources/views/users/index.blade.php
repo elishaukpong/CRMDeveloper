@@ -36,6 +36,9 @@
 @push('scripts')
     <script>
         $(document).ready(function (){
+
+            checkForAdmin();
+
             populateTableFieldWithUsers($('#body'));
         });
     </script>

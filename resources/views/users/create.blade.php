@@ -66,6 +66,9 @@
 @push('scripts')
     <script>
         $(document).ready(function (){
+
+            checkForAdmin();
+
             $('#create-user').submit(function(e){
                 e.preventDefault();
 
