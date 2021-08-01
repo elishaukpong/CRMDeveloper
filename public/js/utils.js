@@ -2,13 +2,13 @@
 const apiBaseUrl = location.origin + '/api/v1/';
 const frontEndBase = location.origin + '/';
 
-let roles = {
+const roles = {
   'admin': 'Admin',
   'writer': 'Writer',
   'reader': 'Viewer',
 };
 
-let apiRouter = {
+const apiRouter = {
      'login' : apiBaseUrl + 'auth/login',
      'logout' : apiBaseUrl + 'auth/logout',
      'addNewUser' : apiBaseUrl + 'users',
@@ -21,7 +21,7 @@ let apiRouter = {
      'likePost' : apiBaseUrl + 'posts/{id}/like',
 }
 
-let webRouter = {
+const webRouter = {
     'adminHomepage' : frontEndBase + 'home',
     'writerHomepage' : frontEndBase + 'writer',
     'viewerHomepage' : frontEndBase + 'reader',
@@ -30,4 +30,4 @@ let webRouter = {
     'posts' : frontEndBase + 'posts',
 }
 
-let okStatus = [201,200,401];
+const okStatus = [201,200,401];
