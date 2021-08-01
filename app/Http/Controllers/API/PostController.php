@@ -48,8 +48,10 @@ class PostController extends Controller
             return response()->json(['message' => 'Post record does not exist'],404);
         }
 
-        if(auth()->user()->can('like articles'))
-            $post->recordLike();
+        if(! auth()->user()->can('like articles'))
+            return response()->json(['message' => 'Post Can Only be liked by Reader'],403);
+
+        $post->recordLike();
 
         return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
     }

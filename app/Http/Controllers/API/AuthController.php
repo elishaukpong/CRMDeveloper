@@ -24,7 +24,7 @@ class AuthController extends Controller
         $credentials = $request->only(['email', 'password']);
 
         if (! $token = auth()->attempt($credentials)) {
-            return response()->json(['error' => 'Email or Password does not match any user record'], 401);
+            return response()->json(['message' => 'Email or Password does not match any user record'], 401);
         }
 
         return $this->respondWithToken($token, collect([auth()->user()])->transformWith(new UserTransformer())->toArray());

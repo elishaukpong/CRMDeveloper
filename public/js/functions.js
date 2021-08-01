@@ -112,9 +112,9 @@ function populateSelectFieldWithUsers(element) {
     makeRequestWithoutBody('GET',getAllUser,formatUsersForRoleChangeSelectElement,element);
 }
 
-function formatUsersForRoleChangeSelectElement(data, element){
+function formatUsersForRoleChangeSelectElement(result, element){
     element.append(
-        data.reduce(function(cleanedData, currentData){
+        result.data.reduce(function(cleanedData, currentData){
             return cleanedData += `<option value="${currentData.id}">${currentData.name}</option>`;
         },'')
     );
@@ -124,9 +124,9 @@ function populateTableFieldWithUsers(element) {
     makeRequestWithoutBody('GET',getAllUser,formatUsersForDisplayUsersTableElement,element);
 }
 
-function formatUsersForDisplayUsersTableElement(data, element){
+function formatUsersForDisplayUsersTableElement(result, element){
     element.append(
-        data.reduce(function(cleanedData, currentData){
+        result.data.reduce(function(cleanedData, currentData){
             return cleanedData += `<tr>
                                         <td>${currentData.name}</td>
                                         <td>${currentData.email}</td>
@@ -173,10 +173,17 @@ function makeRequestWithBody(requestVerb,requestUrl, data, successHandler){
     };
 
     fetch(requestUrl, requestOptions)
-        .then(response => response.text())
-        .then(result => JSON.parse(result))
+        .then((response) => {
+            if (okStatus.includes(response.status)) {
+                return Promise.resolve(response.json());
+            }
+            return Promise.resolve(response.json())
+                .then((responseInJson) => {
+                    return Promise.reject(responseInJson.message);
+                });
+        })
         .then(result => successHandler(result))
-        .catch(error => console.log('error', error));
+        .catch(error => errorHandler(error));
 }
 
 function makeRequestWithoutBody(requestVerb,requestUrl,successHandler,element){
@@ -190,19 +197,26 @@ function makeRequestWithoutBody(requestVerb,requestUrl,successHandler,element){
     };
 
     fetch(requestUrl, requestOptions)
-        .then(response => response.text())
-        .then(result => JSON.parse(result))
-        .then(result => successHandler(result.data,element))
-        .catch(error => console.log(error));
+        .then((response) => {
+            if (okStatus.includes(response.status)) {
+                return Promise.resolve(response.json());
+            }
+            return Promise.resolve(response.json())
+                            .then((responseInJson) => {
+                                return Promise.reject(responseInJson.message);
+                            });
+        })
+        .then(result => successHandler(result,element))
+        .catch(error => errorHandler(error));
 }
 
 function populateTableFieldWithPosts(element){
     makeRequestWithoutBody('GET',getAllPost,formatPostsForPostTableElement,element);
 }
 
-function formatPostsForPostTableElement(data,element) {
+function formatPostsForPostTableElement(result,element) {
     element.append(
-        data.reduce(function(cleanedData, currentData){
+        result.data.reduce(function(cleanedData, currentData){
             return cleanedData += `<tr>
                                         <td>${currentData.title}</td>
                                         <td>${currentData.creator.name}</td>
@@ -223,8 +237,8 @@ function loadPost(element){
     makeRequestWithoutBody('GET',getPost + getPostId(), handleLoadPostSuccess, element);
 }
 
-function handleLoadPostSuccess(data, element) {
-    data = data[0];
+function handleLoadPostSuccess(result, element) {
+    let data = result.data[0];
 
     let previousComment = data.comments.reduce(function(cleanedData, currentData){
         return cleanedData += `<li>${currentData.message} - ${currentData.commentator.name}</li>`;
@@ -272,19 +286,25 @@ function likeUserPost(){
 }
 
 function handlePostLikeSuccess(result,element){
-    console.log(result);
     recordSuccess('Post Liked!')
 }
 
 function recordSuccess(message) {
+    displayToastMessage(message,'alerts','primary');
+}
 
-    $('#alerts').append(`<div class="col-8 mx-auto">
-                    <div class="alert alert-primary" role="alert">
+function errorHandler(message) {
+    displayToastMessage(message,'alerts','danger');
+}
+
+function displayToastMessage(message,elementId,alertclass){
+    $(`#${elementId}`).append(`<div class="col-8 mx-auto">
+                    <div class="alert alert-${alertclass}" role="alert">
                         ${message}
                     </div>
                 </div>`);
 
     setTimeout(function(){
-        $('#alerts').empty();
+        $(`#${elementId}`).empty();
     },2000);
 }

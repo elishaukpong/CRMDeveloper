@@ -8,6 +8,8 @@ let roles = {
   'reader': 'Viewer',
 };
 
+let okStatus = [201,200];
+
 //web routes
 const adminHomepage = frontEndBase + 'home';
 const writerHomepage = frontEndBase + 'writer';
