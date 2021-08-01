@@ -47,22 +47,7 @@
             $('#login').submit(function(e){
                 e.preventDefault();
 
-                const email = $('input[name=email]').val();
-                const password = $('input[name=password]').val();
-
-                let requestOptions = {
-                    method: 'POST',
-                    headers:{'content-type': 'application/x-www-form-urlencoded'},
-                    body: new URLSearchParams({
-                        'email': email,
-                        'password': password
-                    })
-                };
-
-                fetch(login, requestOptions)
-                    .then(response => response.text())
-                    .then(result => processLoginSuccess(JSON.parse(result)))
-                    .catch(error => console.log('error', error));
+                loginUser('login');
             });
         });
     </script>

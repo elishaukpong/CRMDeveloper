@@ -2,6 +2,12 @@
 const apiBaseUrl = location.origin + '/api/v1/';
 const frontEndBase = location.origin + '/';
 
+let roles = {
+  'admin': 'Admin',
+  'writer': 'Writer',
+  'reader': 'Viewer',
+};
+
 //web routes
 const adminHomepage = frontEndBase + 'home';
 const writerHomepage = frontEndBase + 'writer';

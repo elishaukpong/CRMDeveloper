@@ -1,3 +1,7 @@
+function loginUser(formElementId){
+    makeRequestWithBody('POST', login, $(`form[id=${formElementId}]`).serialize(), processLoginSuccess);
+}
+
 function processLoginSuccess(data) {
     setCookie('token', data.access_token, data.expires_in);
     setCookie('auth_id', data.user[0].id, data.expires_in);
@@ -39,8 +43,24 @@ function checkForAuth() {
         redirect(loginPage)
     }
 
+}
 
+function checkForAdmin(){
+    if(! checkForRole(roles.admin)){
+        checkForNoAuth();
+    }
+}
 
+function checkForWriter(){
+    if(! checkForRole(roles.writer)){
+        checkForNoAuth();
+    }
+}
+
+function checkForReader(){
+    if(! checkForRole(roles.reader)){
+        checkForNoAuth();
+    }
 }
 
 function checkForNoAuth() {

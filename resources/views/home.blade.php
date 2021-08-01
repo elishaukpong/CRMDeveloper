@@ -19,3 +19,14 @@
     </div>
 </div>
 @endsection
+
+@push('scripts')
+    <script>
+        $(document).ready(function (){
+            checkForAdmin();
+        });
+    </script>
+@endpush
+
+
+
