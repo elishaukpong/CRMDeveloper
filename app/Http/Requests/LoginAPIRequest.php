@@ -2,11 +2,10 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Response;
 use Illuminate\Validation\ValidationException;
 
-class LoginAPIRequest extends FormRequest
+class LoginAPIRequest extends BaseRequest
 {
     /**
      * Determine if the user is authorized to make this request.
