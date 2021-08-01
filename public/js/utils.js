@@ -8,22 +8,26 @@ let roles = {
   'reader': 'Viewer',
 };
 
+let apiRouter = {
+     'login' : apiBaseUrl + 'auth/login',
+     'logout' : apiBaseUrl + 'auth/logout',
+     'addNewUser' : apiBaseUrl + 'users',
+     'getAllUser' : apiBaseUrl + 'users',
+     'changeUserRole' : apiBaseUrl + 'users/changerole',
+     'getAllPost' : apiBaseUrl + 'posts',
+     'getPost' : apiBaseUrl + 'posts/',
+     'addNewPost' : apiBaseUrl + 'posts',
+     'addNewPostComment' : apiBaseUrl + 'posts/comment',
+     'likePost' : apiBaseUrl + 'posts/{id}/like',
+}
+
+let webRouter = {
+    'adminHomepage' : frontEndBase + 'home',
+    'writerHomepage' : frontEndBase + 'writer',
+    'viewerHomepage' : frontEndBase + 'reader',
+    'loginPage' : frontEndBase + 'login',
+    'users' : frontEndBase + 'users',
+    'posts' : frontEndBase + 'posts',
+}
+
 let okStatus = [201,200,401];
-
-//web routes
-const adminHomepage = frontEndBase + 'home';
-const writerHomepage = frontEndBase + 'writer';
-const viewerHomepage = frontEndBase + 'reader';
-const loginPage = frontEndBase + 'login';
-
-//api routes
-const login = apiBaseUrl + 'auth/login';
-const logout = apiBaseUrl + 'auth/logout';
-const addNewUser = apiBaseUrl + 'users';
-const getAllUser = apiBaseUrl + 'users';
-const changeUserRole = apiBaseUrl + 'users/changerole';
-const getAllPost = apiBaseUrl + 'posts';
-const getPost = apiBaseUrl + 'posts/';
-const addNewPost = apiBaseUrl + 'posts';
-const addNewPostComment = apiBaseUrl + 'posts/comment';
-const likePost = apiBaseUrl + 'posts/{id}/like';

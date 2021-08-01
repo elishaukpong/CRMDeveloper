@@ -1,73 +1,3 @@
-function loginUser(formElementId){
-    makeRequestWithBody('POST', login, $(`form[id=${formElementId}]`).serialize(), processLoginSuccess);
-}
-
-function processLoginSuccess(data) {
-    setCookie('token', data.access_token, data.expires_in);
-    setCookie('auth_id', data.user[0].id, data.expires_in);
-    setCookie('role', data.user[0].roles[0].name, data.expires_in);
-
-    return redirect(getAuthTypeRedirectRoute(data.user[0].roles[0].name));
-}
-
-function logoutUser() {
-    makeRequestWithoutBody('POST',logout,processLogoutSuccess,'')
-}
-
-function processLogoutSuccess(data,element){
-    unsetCookie('token');
-    unsetCookie('auth_id');
-    unsetCookie('role');
-
-    return redirect(loginPage);
-}
-
-function getAuthTypeRedirectRoute(type){
-    switch (type) {
-        case 'Admin':
-            return adminHomepage;
-
-        case 'Writer':
-            return writerHomepage;
-
-        default:
-            return viewerHomepage;
-    }
-}
-
-function checkForAuth() {
-
-    token = getCookie('token');
-
-    if( !token ){
-        redirect(loginPage)
-    }
-
-}
-
-function checkAuthFor(role){
-    if(! checkForRole(role)){
-        checkForNoAuth();
-    }
-}
-
-function checkForNoAuth() {
-
-    let token = getCookie('token');
-
-    if( token ){
-        return redirect(getAuthTypeRedirectRoute(getCookie('role')));
-    }
-
-}
-
-function checkForRole(role) {
-    return role === getCookie('role');
-}
-
-function redirect(route) {
-    window.location.href = route;
-}
 
 function setCookie(cname, cvalue, exseconds) {
     const d = new Date();
@@ -96,58 +26,80 @@ function unsetCookie(cname) {
     document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 }
 
-function populateSelectFieldWithUsers(element) {
-    makeRequestWithoutBody('GET',getAllUser,formatUsersForRoleChangeSelectElement,element);
+function getPostId() {
+    return window.location.pathname.split('/').filter(data => data)[1];
 }
 
-function formatUsersForRoleChangeSelectElement(result, element){
-    element.append(
-        result.data.reduce(function(cleanedData, currentData){
-            return cleanedData += `<option value="${currentData.id}">${currentData.name}</option>`;
-        },'')
-    );
+
+function redirect(route) {
+    window.location.href = route;
 }
 
-function populateTableFieldWithUsers(element) {
-    makeRequestWithoutBody('GET',getAllUser,formatUsersForDisplayUsersTableElement,element);
+function getAuthTypeRedirectRoute(type){
+    switch (type) {
+        case 'Admin':
+            return webRouter.adminHomepage;
+
+        case 'Writer':
+            return webRouter.writerHomepage;
+
+        default:
+            return webRouter.viewerHomepage;
+    }
 }
 
-function formatUsersForDisplayUsersTableElement(result, element){
-    element.append(
-        result.data.reduce(function(cleanedData, currentData){
-            return cleanedData += `<tr>
-                                        <td>${currentData.name}</td>
-                                        <td>${currentData.email}</td>
-                                        <td>${currentData.roles[0].name}</td>
-                                        <td>${currentData.created_at}</td>
-                                    </tr>`;
-        },'')
-    );
+
+function recordSuccess(message) {
+    displayToastMessage(message,'alerts','primary');
 }
 
-function processUserRoleChange(elementId) {
-    makeRequestWithBody('POST', changeUserRole, $(`form[id=${elementId}]`).serialize(), handleUserRoleChangeSuccess);
+function errorHandler(message) {
+    displayToastMessage(message,'alerts','danger');
 }
 
-function createNewUser(formElementId) {
-    makeRequestWithBody('POST', addNewUser, $(`form[id=${formElementId}]`).serialize(), handleUserRegistrationSuccess);
+function displayToastMessage(message,elementId,alertclass){
+    $(`#${elementId}`).append(`<div class="col-8 mx-auto">
+                    <div class="alert alert-${alertclass}" role="alert">
+                        ${message}
+                    </div>
+                </div>`);
+
+    setTimeout(function(){
+        $(`#${elementId}`).empty();
+    },2000);
 }
 
-function handleUserRegistrationSuccess(result){
-    return redirect('/users');
+
+function checkForAuth() {
+
+    token = getCookie('token');
+
+    if( !token ){
+        redirect(webRouter.loginPage)
+    }
+
 }
 
-function createNewPost(formElementId) {
-    makeRequestWithBody('POST', addNewPost, $(`form[id=${formElementId}]`).serialize(), handlePostCreationSuccess);
+function checkAuthFor(role){
+    if(! checkForRole(role)){
+        checkForNoAuth();
+    }
 }
 
-function handlePostCreationSuccess(result){
-    return redirect('/posts');
+function checkForNoAuth() {
+
+    let token = getCookie('token');
+
+    if( token ){
+        return redirect(getAuthTypeRedirectRoute(getCookie('role')));
+    }
+
 }
 
-function handleUserRoleChangeSuccess(result){
-    return redirect('/users');
+function checkForRole(role) {
+    return role === getCookie('role');
 }
+
 
 function makeRequestWithBody(requestVerb,requestUrl, data, successHandler){
     let requestOptions = {
@@ -190,16 +142,94 @@ function makeRequestWithoutBody(requestVerb,requestUrl,successHandler,element){
                 return Promise.resolve(response.json());
             }
             return Promise.resolve(response.json())
-                            .then((responseInJson) => {
-                                return Promise.reject(responseInJson.message);
-                            });
+                .then((responseInJson) => {
+                    return Promise.reject(responseInJson.message);
+                });
         })
         .then(result => successHandler(result,element))
         .catch(error => errorHandler(error));
 }
 
+
+function loginUser(formElementId){
+    makeRequestWithBody('POST', apiRouter.login, $(`form[id=${formElementId}]`).serialize(), processLoginSuccess);
+}
+
+function processLoginSuccess(data) {
+    setCookie('token', data.access_token, data.expires_in);
+    setCookie('auth_id', data.user[0].id, data.expires_in);
+    setCookie('role', data.user[0].roles[0].name, data.expires_in);
+
+    return redirect(getAuthTypeRedirectRoute(data.user[0].roles[0].name));
+}
+
+function logoutUser() {
+    makeRequestWithoutBody('POST',apiRouter.logout,processLogoutSuccess,'')
+}
+
+function processLogoutSuccess(data,element){
+    unsetCookie('token');
+    unsetCookie('auth_id');
+    unsetCookie('role');
+
+    return redirect(webRouter.loginPage);
+}
+
+function populateSelectFieldWithUsers(element) {
+    makeRequestWithoutBody('GET',apiRouter.getAllUser,formatUsersForRoleChangeSelectElement,element);
+}
+
+function formatUsersForRoleChangeSelectElement(result, element){
+    element.append(
+        result.data.reduce(function(cleanedData, currentData){
+            return cleanedData += `<option value="${currentData.id}">${currentData.name}</option>`;
+        },'')
+    );
+}
+
+function populateTableFieldWithUsers(element) {
+    makeRequestWithoutBody('GET',apiRouter.getAllUser,formatUsersForDisplayUsersTableElement,element);
+}
+
+function formatUsersForDisplayUsersTableElement(result, element){
+    element.append(
+        result.data.reduce(function(cleanedData, currentData){
+            return cleanedData += `<tr>
+                                        <td>${currentData.name}</td>
+                                        <td>${currentData.email}</td>
+                                        <td>${currentData.roles[0].name}</td>
+                                        <td>${currentData.created_at}</td>
+                                    </tr>`;
+        },'')
+    );
+}
+
+function processUserRoleChange(elementId) {
+    makeRequestWithBody('POST', apiRouter.changeUserRole, $(`form[id=${elementId}]`).serialize(), handleUserRoleChangeSuccess);
+}
+
+function handleUserRoleChangeSuccess(result){
+    return redirect(webRouter.users);
+}
+
+function createNewUser(formElementId) {
+    makeRequestWithBody('POST', apiRouter.addNewUser, $(`form[id=${formElementId}]`).serialize(), handleUserRegistrationSuccess);
+}
+
+function handleUserRegistrationSuccess(result){
+    return redirect(webRouter.users);
+}
+
+function createNewPost(formElementId) {
+    makeRequestWithBody('POST', apiRouter.addNewPost, $(`form[id=${formElementId}]`).serialize(), handlePostCreationSuccess);
+}
+
+function handlePostCreationSuccess(result){
+    return redirect(webRouter.posts);
+}
+
 function populateTableFieldWithPosts(element){
-    makeRequestWithoutBody('GET',getAllPost,formatPostsForPostTableElement,element);
+    makeRequestWithoutBody('GET',apiRouter.getAllPost,formatPostsForPostTableElement,element);
 }
 
 function formatPostsForPostTableElement(result,element) {
@@ -217,12 +247,8 @@ function formatPostsForPostTableElement(result,element) {
     );
 }
 
-function getPostId() {
-    return window.location.pathname.split('/').filter(data => data)[1];
-}
-
 function loadPost(element){
-    makeRequestWithoutBody('GET',getPost + getPostId(), handleLoadPostSuccess, element);
+    makeRequestWithoutBody('GET',apiRouter.getPost + getPostId(), handleLoadPostSuccess, element);
 }
 
 function handleLoadPostSuccess(result, element) {
@@ -260,7 +286,7 @@ function handleLoadPostSuccess(result, element) {
 }
 
 function createNewPostComment(formElementId){
-    makeRequestWithBody('POST', addNewPostComment, $(`form[id=${formElementId}]`).serialize(), handlePostCommentCreationSuccess);
+    makeRequestWithBody('POST', apiRouter.addNewPostComment, $(`form[id=${formElementId}]`).serialize(), handlePostCommentCreationSuccess);
 }
 
 function handlePostCommentCreationSuccess(result){
@@ -269,7 +295,7 @@ function handlePostCommentCreationSuccess(result){
 }
 
 function likeUserPost(){
-    let likePostUrl = likePost.replace('{id}', getPostId());
+    let likePostUrl = apiRouter.likePost.replace('{id}', getPostId());
     makeRequestWithoutBody('GET',likePostUrl,handlePostLikeSuccess,'')
 }
 
@@ -277,22 +303,4 @@ function handlePostLikeSuccess(result,element){
     recordSuccess('Post Liked!')
 }
 
-function recordSuccess(message) {
-    displayToastMessage(message,'alerts','primary');
-}
 
-function errorHandler(message) {
-    displayToastMessage(message,'alerts','danger');
-}
-
-function displayToastMessage(message,elementId,alertclass){
-    $(`#${elementId}`).append(`<div class="col-8 mx-auto">
-                    <div class="alert alert-${alertclass}" role="alert">
-                        ${message}
-                    </div>
-                </div>`);
-
-    setTimeout(function(){
-        $(`#${elementId}`).empty();
-    },2000);
-}
