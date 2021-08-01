@@ -27,5 +27,5 @@ Route::get('/users/changerole', 'HomeController@changeUserRole')->name('user.cha
 
 Route::get('/writer', 'HomeController@writerIndex')->name('writer.home');
 Route::get('/posts', 'HomeController@allPosts')->name('post.all');
+Route::get('/posts/create', 'HomeController@createPost')->name('post.create');
 Route::get('/posts/{post}', 'HomeController@viewPosts')->name('post.view');
-Route::post('/posts/create', 'HomeController@allPosts')->name('post.create');

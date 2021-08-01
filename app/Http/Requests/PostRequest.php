@@ -14,9 +14,9 @@ class PostRequest extends FormRequest
      */
     public function authorize()
     {
-//        if($this->user()->can('create articles')){
+        if($this->user()->can('create articles')){
             return true;
-//        }
+        }
 
         return false;
     }

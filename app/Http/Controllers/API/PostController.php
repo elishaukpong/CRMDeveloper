@@ -20,10 +20,6 @@ class PostController extends Controller
     {
         $user = User::findOrFail($request->user_id);
 
-        if(! $user->hasRole('Writer')){
-            return response()->json(['message' => 'You must be a writer to make posts.'], 403);
-        }
-
         $post = Post::create($request->all());
 
         return response()->json(['message' => 'Post created successfully', 'data' => $this->transformObject($post, new PostTransformer())]);

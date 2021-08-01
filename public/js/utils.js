@@ -9,3 +9,6 @@ const getAllUser = url + 'users';
 const changeUserRole = url + 'users/changerole';
 const getAllPost = url + 'posts';
 const getPost = url + 'posts/';
+const addNewPost = url + 'posts';
+const addNewPostComment = url + 'posts/comment';
+const likePost = url + 'posts/{id}/like';

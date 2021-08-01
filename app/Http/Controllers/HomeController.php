@@ -46,4 +46,9 @@ class HomeController extends Controller
     {
         return view('posts.show');
     }
+
+    public function createPost()
+    {
+        return view('posts.create');
+    }
 }

@@ -27,7 +27,7 @@ class AuthController extends Controller
             return response()->json(['error' => 'Email or Password does not match any user record'], 401);
         }
 
-        return $this->respondWithToken($token);
+        return $this->respondWithToken($token, collect([auth()->user()])->transformWith(new UserTransformer())->toArray());
     }
 
     /**
@@ -57,7 +57,7 @@ class AuthController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function refresh()
+    public function refresh(): \Illuminate\Http\JsonResponse
     {
         return $this->respondWithToken(auth()->refresh());
     }
@@ -65,15 +65,16 @@ class AuthController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
+     * @param string $token
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    protected function respondWithToken($token)
+    protected function respondWithToken(string $token, $user): \Illuminate\Http\JsonResponse
     {
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
+            'user' => $user,
             'expires_in' => auth()->factory()->getTTL() * 60
         ]);
     }

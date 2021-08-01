@@ -30,6 +30,6 @@ Route::group(['prefix' => 'v1', 'middleware' => 'api'], function(){
         Route::post('posts', 'API\PostController@add');
         Route::get('posts/{id}', 'API\PostController@view');
         Route::get('posts/{id}/like', 'API\PostController@like');
-        Route::post('post/comment', 'API\PostController@comment');
+        Route::post('posts/comment', 'API\PostController@comment');
     });
 });

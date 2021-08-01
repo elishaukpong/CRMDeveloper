@@ -1,6 +1,8 @@
 function processLoginSuccess(data) {
 
     setCookie('token', data.access_token, data.expires_in);
+    setCookie('auth_id', data.user[0].id, data.expires_in);
+    setCookie('role', data.user[0].roles[0].name, data.expires_in);
 
     return redirect('/home');
 
@@ -78,6 +80,14 @@ function handleUserRegistrationSuccess(result){
     return redirect('/users');
 }
 
+function createNewPost(formElementId) {
+    makeRequestWithBody('POST', addNewPost, $(`form[id=${formElementId}]`).serialize(), handlePostCreationSuccess);
+}
+
+function handlePostCreationSuccess(result){
+    return redirect('/posts');
+}
+
 function handleUserRoleChangeSuccess(result){
     return redirect('/users');
 }
@@ -114,7 +124,7 @@ function makeRequestWithoutBody(requestVerb,requestUrl,successHandler,element){
         .then(response => response.text())
         .then(result => JSON.parse(result))
         .then(result => successHandler(result.data,element))
-        .catch(error => console.log('error', error));
+        .catch(error => console.log(error));
 }
 
 function populateTableFieldWithPosts(element){
@@ -134,46 +144,64 @@ function formatPostsForPostTableElement(data,element) {
     );
 }
 
+function getPostId() {
+    return window.location.pathname[window.location.pathname.length-1];
+}
+
 function loadPost(element){
-
-    let postId = window.location.pathname[window.location.pathname.length-1];
-
-    makeRequestWithoutBody('GET',getPost + postId, handleLoadPostSuccess, element);
-
+    makeRequestWithoutBody('GET',getPost + getPostId(), handleLoadPostSuccess, element);
 }
 
 function handleLoadPostSuccess(data, element) {
     data = data[0];
 
-    let previousComment = data[0].comments.reduce(function(cleanedData, currentData){
-        return cleanedData += `<tr>
-                                        <td>${currentData.name}</td>
-                                        <td>${currentData.email}</td>
-                                        <td>${currentData.roles[0].name}</td>
-                                        <td>${currentData.created_at}</td>
-                                    </tr>`;
-    },'')
+    let previousComment = data.comments.reduce(function(cleanedData, currentData){
+        return cleanedData += `<li>${currentData.message} - ${currentData.commentator.name}</li>`;
+    },'');
 
-    let content = `<h1 class="mb-4">${data.title}</h1>
+    let content = `
+                    <h1 class="mb-4">${data.title}</h1>
+                    <p>${data.content}</p>
 
-            <p>${data.content}</p>
+                    <button class="btn btn-dark" id="like">Like</button> <br><br>
 
-            <button class="btn btn-dark" data-id="${data.id}">Like</button> <br><br>
+                    <form class="mt-5" id="comment">
+                        <div class="form-group">
+                            <label for="exampleFormControlTextarea1">Add Comment</label>
+                            <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                        </div>
 
-            <form action="" class="mt-5">
-                <div class="form-group">
-                    <label for="exampleFormControlTextarea1">Add Comment</label>
-                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-                </div>
+                        <input name='user_id' hidden value="${getCookie('auth_id')}">
+                        <input name='post_id' hidden value="${getPostId()}">
 
-                <button class="btn btn-primary btn-sm">Comment</button>
-            </form>
+                        <button class="btn btn-primary btn-sm" type="submit">Comment</button>
+                    </form>
 
-            <ul class="mt-5">
-                <p>Previous Comments</p>
-                ${previousComment}
-            </ul>
-`;
+                    <ul class="mt-5">
+                        <p>Previous Comments</p>
+                        ${previousComment}
+                    </ul>
+                `;
 
     element.append(content);
+}
+
+function createNewPostComment(formElementId){
+    makeRequestWithBody('POST', addNewPostComment, $(`form[id=${formElementId}]`).serialize(), handlePostCommentCreationSuccess);
+}
+
+function handlePostCommentCreationSuccess(result){
+    return location.reload();
+}
+
+function likeUserPost(){
+    let likePostUrl = likePost.replace('{id}', getPostId());
+    makeRequestWithoutBody('GET',likePostUrl,handlePostLikeSuccess,'')
+}
+
+
+function handlePostLikeSuccess(result,element){
+
+    console.log(result);
+    // return location.reload();
 }

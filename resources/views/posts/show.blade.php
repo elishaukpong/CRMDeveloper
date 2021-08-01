@@ -17,6 +17,15 @@
     <script>
         $(document).ready(function (){
             loadPost($('#post'));
+
+            $(document).on('submit','#comment',function(e){
+                e.preventDefault();
+                createNewPostComment('comment');
+            });
+
+            $(document).on('click','#like',function(e){
+                likeUserPost();
+            });
         });
     </script>
 @endpush
