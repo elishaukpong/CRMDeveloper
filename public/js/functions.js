@@ -3,25 +3,53 @@ function processLoginSuccess(data) {
     setCookie('auth_id', data.user[0].id, data.expires_in);
     setCookie('role', data.user[0].roles[0].name, data.expires_in);
 
-    let redirectRoute = '';
+    return redirect(getAuthTypeRedirectRoute(data.user[0].roles[0].name));
+}
 
-    switch (data.user[0].roles[0].name) {
+function logoutUser() {
+    makeRequestWithoutBody('POST',logout,processLogoutSuccess,'')
+}
+
+function processLogoutSuccess(data,element){
+    unsetCookie('token');
+    unsetCookie('auth_id');
+    unsetCookie('role');
+
+    return redirect(loginPage);
+}
+
+function getAuthTypeRedirectRoute(type){
+    switch (type) {
         case 'Admin':
-            redirectRoute = adminHomepage;
-            break;
+            return adminHomepage;
+
         case 'Writer':
-            redirectRoute = writerHomepage;
-            break;
+            return writerHomepage;
+
         default:
-            redirectRoute = viewerHomepage;
-
-            break;
+            return viewerHomepage;
     }
-
-    return redirect(redirectRoute);
 }
 
 function checkForAuth() {
+
+    token = getCookie('token');
+
+    if( !token ){
+        redirect(loginPage)
+    }
+
+
+
+}
+
+function checkForNoAuth() {
+
+    let token = getCookie('token');
+
+    if( token ){
+        return redirect(getAuthTypeRedirectRoute(getCookie('role')));
+    }
 
 }
 
@@ -54,6 +82,10 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function unsetCookie(cname) {
+    document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/";
 }
 
 function populateSelectFieldWithUsers(element) {

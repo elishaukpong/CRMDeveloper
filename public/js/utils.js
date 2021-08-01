@@ -6,6 +6,7 @@ const frontEndBase = location.origin + '/';
 const adminHomepage = frontEndBase + 'home';
 const writerHomepage = frontEndBase + 'writer';
 const viewerHomepage = frontEndBase + 'reader';
+const loginPage = frontEndBase + 'login';
 
 //api routes
 const login = apiBaseUrl + 'auth/login';
