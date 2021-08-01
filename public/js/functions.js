@@ -38,11 +38,10 @@ function getCookie(cname) {
 }
 
 function populateSelectFieldWithUsers(element) {
-    getAllUsers(formatUsersForRoleChangeSelectElement,element);
+    makeRequestWithoutBody('GET',getAllUser,formatUsersForRoleChangeSelectElement,element);
 }
 
 function formatUsersForRoleChangeSelectElement(data, element){
-
     element.append(
         data.reduce(function(cleanedData, currentData){
             return cleanedData += `<option value="${currentData.id}">${currentData.name}</option>`;
@@ -51,11 +50,10 @@ function formatUsersForRoleChangeSelectElement(data, element){
 }
 
 function populateTableFieldWithUsers(element) {
-    getAllUsers(formatUsersForDisplayUsersTableElement,element);
+    makeRequestWithoutBody('GET',getAllUser,formatUsersForDisplayUsersTableElement,element);
 }
 
 function formatUsersForDisplayUsersTableElement(data, element){
-
     element.append(
         data.reduce(function(cleanedData, currentData){
             return cleanedData += `<tr>
@@ -66,23 +64,6 @@ function formatUsersForDisplayUsersTableElement(data, element){
                                     </tr>`;
         },'')
     );
-}
-
-function getAllUsers(handler,element){
-    let requestOptions = {
-        method: 'GET',
-        headers: {
-            'content-type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json',
-            'Authorization': 'Bearer ' + getCookie('token')
-        }
-    };
-
-    fetch(getAllUser, requestOptions)
-        .then(response => response.text())
-        .then(result => JSON.parse(result))
-        .then(result => handler(result.data, element))
-        .catch(error => console.log('error', error));
 }
 
 function processUserRoleChange(elementId) {
@@ -119,3 +100,80 @@ function makeRequestWithBody(requestVerb,requestUrl, data, successHandler){
         .catch(error => console.log('error', error));
 }
 
+function makeRequestWithoutBody(requestVerb,requestUrl,successHandler,element){
+    let requestOptions = {
+        method: requestVerb,
+        headers: {
+            'content-type': 'application/x-www-form-urlencoded',
+            'Accept': 'application/json',
+            'Authorization': 'Bearer ' + getCookie('token')
+        },
+    };
+
+    fetch(requestUrl, requestOptions)
+        .then(response => response.text())
+        .then(result => JSON.parse(result))
+        .then(result => successHandler(result.data,element))
+        .catch(error => console.log('error', error));
+}
+
+function populateTableFieldWithPosts(element){
+    makeRequestWithoutBody('GET',getAllPost,formatPostsForPostTableElement,element);
+}
+
+function formatPostsForPostTableElement(data,element) {
+    element.append(
+        data.reduce(function(cleanedData, currentData){
+            return cleanedData += `<tr>
+                                        <td>${currentData.title}</td>
+                                        <td>${currentData.creator.name}</td>
+                                        <td>${currentData.created_at}</td>
+                                        <td><a href="/posts/${currentData.id}" class="btn btn-dark form-control">View</a></td>
+                                    </tr>`;
+        },'')
+    );
+}
+
+function loadPost(element){
+
+    let postId = window.location.pathname[window.location.pathname.length-1];
+
+    makeRequestWithoutBody('GET',getPost + postId, handleLoadPostSuccess, element);
+
+}
+
+function handleLoadPostSuccess(data, element) {
+    data = data[0];
+
+    let previousComment = data[0].comments.reduce(function(cleanedData, currentData){
+        return cleanedData += `<tr>
+                                        <td>${currentData.name}</td>
+                                        <td>${currentData.email}</td>
+                                        <td>${currentData.roles[0].name}</td>
+                                        <td>${currentData.created_at}</td>
+                                    </tr>`;
+    },'')
+
+    let content = `<h1 class="mb-4">${data.title}</h1>
+
+            <p>${data.content}</p>
+
+            <button class="btn btn-dark" data-id="${data.id}">Like</button> <br><br>
+
+            <form action="" class="mt-5">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Add Comment</label>
+                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                </div>
+
+                <button class="btn btn-primary btn-sm">Comment</button>
+            </form>
+
+            <ul class="mt-5">
+                <p>Previous Comments</p>
+                ${previousComment}
+            </ul>
+`;
+
+    element.append(content);
+}

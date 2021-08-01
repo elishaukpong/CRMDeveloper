@@ -23,3 +23,9 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/users', 'HomeController@allUsers')->name('user.all');
 Route::get('/users/create', 'HomeController@createUser')->name('user.create');
 Route::get('/users/changerole', 'HomeController@changeUserRole')->name('user.changerole');
+
+
+Route::get('/writer', 'HomeController@writerIndex')->name('writer.home');
+Route::get('/posts', 'HomeController@allPosts')->name('post.all');
+Route::get('/posts/{post}', 'HomeController@viewPosts')->name('post.view');
+Route::post('/posts/create', 'HomeController@allPosts')->name('post.create');

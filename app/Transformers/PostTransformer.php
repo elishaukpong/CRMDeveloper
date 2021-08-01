@@ -38,7 +38,7 @@ class PostTransformer extends TransformerAbstract
             'content' => $post->content,
             'views' => $post->views ?? 0,
             'likes' => $post->likes ?? 0,
-            'created_at' => $post->created_at
+            'created_at' => $post->created_at->format('d-m-Y')
         ];
     }
 

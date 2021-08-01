@@ -28,8 +28,8 @@ Route::group(['prefix' => 'v1', 'middleware' => 'api'], function(){
 
         Route::get('posts', 'API\PostController@index');
         Route::post('posts', 'API\PostController@add');
-        Route::get('post/{id}', 'API\PostController@view');
-        Route::get('post/{id}/like', 'API\PostController@like');
+        Route::get('posts/{id}', 'API\PostController@view');
+        Route::get('posts/{id}/like', 'API\PostController@like');
         Route::post('post/comment', 'API\PostController@comment');
     });
 });

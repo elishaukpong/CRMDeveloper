@@ -31,4 +31,19 @@ class HomeController extends Controller
     {
         return view('users.changerole');
     }
+
+    public function writerIndex()
+    {
+        return view('writer');
+    }
+
+    public function allPosts()
+    {
+        return view('posts.index');
+    }
+
+    public function viewPosts()
+    {
+        return view('posts.show');
+    }
 }

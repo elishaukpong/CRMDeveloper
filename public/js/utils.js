@@ -7,3 +7,5 @@ const logout = url + 'auth/logout';
 const addNewUser = url + 'users';
 const getAllUser = url + 'users';
 const changeUserRole = url + 'users/changerole';
+const getAllPost = url + 'posts';
+const getPost = url + 'posts/';
