@@ -42,12 +42,16 @@
 @push('scripts')
     <script>
         $(document).ready(function (){
+
+            checkForWriter();
+
             $('#create-post').submit(function(e){
                 e.preventDefault();
 
                 $(`form[id=create-post]`).append(`<input name='user_id' hidden value="${getCookie('auth_id')}">`);
 
                 createNewPost('create-post');
+
             });
         });
     </script>

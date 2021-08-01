@@ -21,11 +21,16 @@
             $(document).on('submit','#comment',function(e){
                 e.preventDefault();
                 createNewPostComment('comment');
+
+                $('#textarea').val('');
+
             });
 
             $(document).on('click','#like',function(e){
                 likeUserPost();
             });
+
+
         });
     </script>
 @endpush

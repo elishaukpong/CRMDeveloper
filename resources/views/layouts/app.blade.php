@@ -49,6 +49,7 @@
         </nav>
 
         <main class="py-4">
+            <div class="row" id="alerts"></div>
             @yield('content')
         </main>
     </div>

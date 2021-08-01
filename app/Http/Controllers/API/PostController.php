@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CommentRequest;
 use App\Http\Requests\PostRequest;
 use App\Post;
+use App\Transformers\CommentTransformer;
 use App\Transformers\PostTransformer;
 use App\User;
 
@@ -57,9 +58,9 @@ class PostController extends Controller
     {
         $post = Post::findOrFail($request->post_id);
 
-        $post->recordComment($request->all());
+        $comment = $post->recordComment($request->all());
 
-        return response()->json(['message' => 'Post has been commented on Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
+        return response()->json(['message' => 'Post has been commented on Successfully', 'data' => $this->transformObject($comment, new CommentTransformer())]);
     }
 
 

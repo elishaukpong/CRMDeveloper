@@ -237,7 +237,7 @@ function handleLoadPostSuccess(data, element) {
                     <form class="mt-5" id="comment">
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Add Comment</label>
-                            <textarea class="form-control" name="message" id="exampleFormControlTextarea1" rows="3" required></textarea>
+                            <textarea class="form-control" name="message" id="textarea" rows="3" required></textarea>
                         </div>
 
                         <input name='user_id' hidden value="${getCookie('auth_id')}">
@@ -246,7 +246,7 @@ function handleLoadPostSuccess(data, element) {
                         <button class="btn btn-primary btn-sm" type="submit">Comment</button>
                     </form>
 
-                    <ul class="mt-5">
+                    <ul class="mt-5" id="previous-comment">
                         <p>Previous Comments</p>
                         ${previousComment}
                     </ul>
@@ -260,7 +260,8 @@ function createNewPostComment(formElementId){
 }
 
 function handlePostCommentCreationSuccess(result){
-    return location.reload();
+    recordSuccess(result.message);
+    $('#previous-comment').append(`<li>${result.data[0].message} - ${result.data[0].commentator.name}</li>`);
 }
 
 function likeUserPost(){
@@ -269,7 +270,18 @@ function likeUserPost(){
 }
 
 function handlePostLikeSuccess(result,element){
+    recordSuccess('Post Liked!')
+}
 
-    console.log(result);
-    // return location.reload();
+function recordSuccess(message) {
+
+    $('#alerts').append(`<div class="col-8 mx-auto">
+                    <div class="alert alert-primary" role="alert">
+                        ${message}
+                    </div>
+                </div>`);
+
+    setTimeout(function(){
+        $('#alerts').empty();
+    },2000);
 }
