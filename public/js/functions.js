@@ -207,6 +207,8 @@ function formatPostsForPostTableElement(data,element) {
                                         <td>${currentData.title}</td>
                                         <td>${currentData.creator.name}</td>
                                         <td>${currentData.created_at}</td>
+                                        <td>${currentData.likes}</td>
+                                        <td>${currentData.views}</td>
                                         <td><a href="/posts/${currentData.id}" class="btn btn-dark form-control">View</a></td>
                                     </tr>`;
         },'')
@@ -214,7 +216,7 @@ function formatPostsForPostTableElement(data,element) {
 }
 
 function getPostId() {
-    return window.location.pathname[window.location.pathname.length-1];
+    return window.location.pathname.split('/').filter(data => data)[1];
 }
 
 function loadPost(element){
@@ -270,6 +272,7 @@ function likeUserPost(){
 }
 
 function handlePostLikeSuccess(result,element){
+    console.log(result);
     recordSuccess('Post Liked!')
 }
 

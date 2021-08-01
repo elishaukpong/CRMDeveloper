@@ -15,6 +15,8 @@
                     <th scope="col">Title</th>
                     <th scope="col">Created By</th>
                     <th scope="col">Created On</th>
+                    <th scope="col">LikeCount</th>
+                    <th scope="col">ViewCount</th>
                     <th scope="col">View</th>
                 </tr>
             </thead>
