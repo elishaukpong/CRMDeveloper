@@ -21,7 +21,7 @@ class PostController extends Controller
     {
         $post = Post::create($request->all());
 
-        return response()->json(['message' => 'Post created successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
+        return response()->json(['message' => 'Post created successfully', 'data' => $this->transformObject(collect([$post]), new PostTransformer())]);
     }
 
     public function view($postId)
@@ -31,7 +31,7 @@ class PostController extends Controller
         if(auth()->user()->can('view articles'))
             $post->recordViewership();
 
-        return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
+        return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject(collect([$post]), new PostTransformer())]);
     }
 
     public function like($postId)
@@ -43,7 +43,7 @@ class PostController extends Controller
 
         $post->recordLike();
 
-        return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject($post, new PostTransformer())]);
+        return response()->json(['message' => 'Post Retrieved Successfully', 'data' => $this->transformObject(collect([$post]), new PostTransformer())]);
     }
 
     public function comment(CommentRequest $request)
@@ -52,7 +52,7 @@ class PostController extends Controller
 
         $comment = $post->recordComment($request->all());
 
-        return response()->json(['message' => 'Post has been commented on Successfully', 'data' => $this->transformObject($comment, new CommentTransformer())]);
+        return response()->json(['message' => 'Post has been commented on Successfully', 'data' => $this->transformObject(collect([$comment]), new CommentTransformer())]);
     }
 
 

@@ -37,7 +37,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(['message' => 'Authenticated User Retrieved', 'data' => $this->transformObject(auth()->user(), new UserTransformer())]);
+        return response()->json(['message' => 'Authenticated User Retrieved', 'data' => $this->transformObject(collect([auth()->user()]), new UserTransformer())]);
     }
 
     /**
@@ -59,7 +59,7 @@ class AuthController extends Controller
      */
     public function refresh(): \Illuminate\Http\JsonResponse
     {
-        return $this->respondWithToken(auth()->refresh());
+        return $this->respondWithToken(auth()->refresh(), auth()->user());
     }
 
     /**
